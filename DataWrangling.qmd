@@ -1,0 +1,80 @@
+---
+title: "Class 6 - More Data Wrangling"
+format: html
+---
+
+## Scatterplot with ggplot
+```{r}
+f <- "https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/KamilarAndCooperData.csv"
+```
+
+```{r}
+library(readr)
+d <- read_csv(f, col_names = TRUE)
+```
+
+```{r}
+library(ggplot2)
+p <- ggplot(data = d, aes(
+                          x = log(Body_mass_female_mean),
+                          y = log(Brain_Size_Female_Mean)
+))
+p <- p + geom_point(na.rm = TRUE)
+p
+```
+
+Adding a regression line
+```{r}
+p <- p + geom_smooth(method = "lm", na.rm = TRUE, color = "green")
+p
+```
+
+```{r}
+p <- ggplot(data = d, aes(
+            x = log(Body_mass_female_mean),
+            y = log(Brain_Size_Female_Mean)
+)) #creating the plot, just an x and y axis no points
+
+p <- p + geom_point(na.rm = TRUE) +
+  geom_smooth(method = "lm", na.rm = TRUE, color = "green") #adds points and regression line
+p
+
+p <- p + 
+  geom_vline(xintercept = 7) + #adds x intercept line
+  geom_hline(yintercept =3) #adds y intercept line
+
+p <- p +
+  geom_point(data = d, aes(
+            x = log(Body_mass_female_mean),
+            y = log(Body_mass_male_mean))) + 
+  geom_smooth(data = d, aes(
+    x = log(Body_mass_female_mean),
+    y = log(Body_mass_male_mean)), method = "lm", na.rm = TRUE, color = "red")
+p
+```
+
+```{r}
+p <- ggplot()#creating the plot, just an x and y axis no points
+
+p <- p + geom_point(data = d, mapping = aes(
+            x = log(Body_mass_female_mean),
+            y = log(Brain_Size_Female_Mean)
+), na.rm = TRUE) +
+  geom_smooth(data = d, aes(
+            x = log(Body_mass_female_mean),
+            y = log(Brain_Size_Female_Mean)), method = "lm", na.rm = TRUE, color = "green") #adds points and regression line
+p
+
+p <- p + 
+  geom_vline(xintercept = 7) + #adds x intercept line
+  geom_hline(yintercept =3) #adds y intercept line
+
+p <- p +
+  geom_point(data = d, mapping = aes(
+            x = log(Body_mass_female_mean),
+            y = log(Body_mass_male_mean))) + 
+  geom_smooth(data = d, aes(
+    x = log(Body_mass_female_mean),
+    y = log(Body_mass_male_mean)), method = "lm", na.rm = TRUE, color = "red")
+p
+```

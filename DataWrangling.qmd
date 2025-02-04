@@ -1,9 +1,13 @@
 ---
 title: "Class 6 - More Data Wrangling"
 format: html
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ## Scatterplot with ggplot
+
 ```{r}
 f <- "https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/KamilarAndCooperData.csv"
 ```
@@ -24,6 +28,7 @@ p
 ```
 
 Adding a regression line
+
 ```{r}
 p <- p + geom_smooth(method = "lm", na.rm = TRUE, color = "green")
 p
@@ -77,4 +82,76 @@ p <- p +
     x = log(Body_mass_female_mean),
     y = log(Body_mass_male_mean)), method = "lm", na.rm = TRUE, color = "red")
 p
+```
+
+\|\> is the same as %\>%
+
+d \<- d \|\> select(A, B, C) #selects columns A, B, C from d and creates
+new d
+
+you can build off d \<- d \|\> select(A, B, C) \|\> filter() \|\>
+arrange()
+
+summarise(.data ....)
+
+s \<- summarise
+
+Using {base} R
+
+```{r}
+s_R <- d[d$Family == "Hominidae" & d$Mass_Dimorphism > 2,]
+```
+
+Using {dplyr}
+
+```{r}
+d
+```
+
+```{r}
+library(dplyr)
+s <- arrange(d, Family, Genus, desc(Body_mass_male_mean))
+```
+
+```{r}
+s <- filter(d, Family == "Hominidae" & Mass_Dimorphism >2)
+s
+```
+
+## Flow Control and Looping
+
+```{r}
+f <- "https://raw.githubusercontent.com/difiore/ada-datasets/refs/heads/main/IMDB-movies.csv"
+```
+
+```{r}
+d <- read_csv(f, col_names = TRUE)
+```
+
+## Conditionals 
+
+-   if (test) {dothis} else {dothat} 
+
+-   ifelse(test, do this if true, do this if false) 
+
+-   if_else(test, do this if true, do this if false) 
+
+-   case_when( 
+          case1 ~ result1, 
+          case2 ~ result2, 
+          case3 ~ result3,
+          TRUE ~ all others ) 
+          )
+        
+d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore",
+                          ifelse(Leaves >= 50, "folivore",
+                          ifelse(Fruit < 50 & Leaves < 50, "omnivore", NA))))
+                          
+```{r}
+library(stringr)
+```
+
+```{r}
+d2 <- mutate(d, comedy = ifelse(Comedy = genres, TRUE, FALSE))
+d2
 ```
